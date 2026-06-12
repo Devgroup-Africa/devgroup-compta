@@ -263,14 +263,6 @@ const InvoiceTemplate = ({ invoice, forPrint = false }: InvoiceTemplateProps) =>
         </div>
       )}
 
-      {/* ── CONDITIONS DE PAIEMENT ── */}
-      {invoice.terms && (
-        <div className="mb-8">
-          <p className="font-semibold text-xs mb-1 text-gray-800">Conditions de paiement :</p>
-          <p className="text-xs text-gray-600 whitespace-pre-line">{invoice.terms}</p>
-        </div>
-      )}
-
       {/* ── SIGNATURES ── */}
       <div className="grid grid-cols-2 gap-12 mt-14">
         <div>

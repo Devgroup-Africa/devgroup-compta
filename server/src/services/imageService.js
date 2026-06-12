@@ -20,7 +20,6 @@ export const generateInvoiceJPEG = async (invoice) => {
     
     const page = await browser.newPage();
     
-    // Set viewport for better quality
     await page.setViewport({
       width: 794,
       height: 1123,
@@ -42,7 +41,6 @@ export const generateInvoiceJPEG = async (invoice) => {
       waitUntil: 'networkidle0'
     });
     
-    // Take screenshot
     const screenshot = await page.screenshot({
       type: 'jpeg',
       quality: 100,
@@ -75,9 +73,32 @@ function formatDate(dateStr) {
   });
 }
 
+function escapeHtml(value) {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+function renderDetailedDescription(description) {
+  const lines = String(description || '').split(/\r?\n/);
+
+  return lines
+    .map((line) => `
+      <div class="description-detail detail-line">
+        <span class="detail-dash">-</span>
+        <span class="detail-text">${escapeHtml(line)}</span>
+      </div>
+    `)
+    .join('');
+}
+
 function generateInvoiceHTML(invoice, logoBase64) {
   const client = invoice.client || {};
   const companyInfo = invoice.companyInfo || {};
+  const items = invoice.items || [];
   
   return `
 <!DOCTYPE html>
@@ -92,83 +113,108 @@ function generateInvoiceHTML(invoice, logoBase64) {
     }
     
     body {
-      font-family: Arial, sans-serif;
+      font-family: "Segoe UI", Arial, sans-serif;
       background: white;
-      padding: 35px;
+      padding: 32px;
       color: #1f2937;
+    }
+
+    .invoice-page {
+      max-width: 896px;
+      margin: 0 auto;
     }
     
     .header {
       display: flex;
       align-items: center;
-      gap: 10px;
-      margin-bottom: 10px;
+      justify-content: space-between;
+      margin-bottom: 4px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
     
     .logo {
-      height: 22px;
+      height: 40px;
       width: auto;
     }
     
     .company-name {
-      font-size: 20px;
-      font-weight: bold;
-      color: #1e3a5f;
+      font-size: 14px;
+      font-weight: 600;
+      color: #1e3a8a;
+      letter-spacing: 0.04em;
     }
     
     .blue-line {
-      height: 2px;
-      background: #1e40af;
-      margin: 10px 0 18px 0;
+      height: 1px;
+      background: #2563eb;
+      margin: 8px 0 24px 0;
     }
     
+    .title-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 24px 0 32px;
+    }
+
+    .title-accent {
+      width: 6px;
+      height: 40px;
+      background: #1d4ed8;
+      border-radius: 2px;
+      margin-right: 12px;
+    }
+
     .title {
-      text-align: center;
-      font-size: 48px;
-      font-weight: bold;
-      color: #1e40af;
-      margin-bottom: 18px;
-      letter-spacing: 2px;
+      font-size: 36px;
+      line-height: 40px;
+      font-weight: 800;
+      color: #1e3a8a;
+      letter-spacing: 0.18em;
     }
     
     .thin-line {
-      height: 1.5px;
-      background: #1e40af;
-      margin-bottom: 18px;
+      height: 1px;
+      background: #2563eb;
+      margin-bottom: 28px;
     }
     
     .two-columns {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 20px;
-      margin-bottom: 18px;
+      gap: 24px;
+      margin-bottom: 28px;
     }
     
     .box {
-      border: 1px solid #d1d5db;
-      border-radius: 4px;
-      padding: 12px;
-      min-height: 85px;
+      padding: 16px;
+      min-height: 88px;
     }
     
     .box.emitter {
-      background: #e8f1ff;
+      background: #eff6ff;
+      border-radius: 2px;
     }
     
     .box-title {
       font-size: 13px;
       font-weight: bold;
-      color: #1e3a5f;
+      color: #1e3a8a;
       margin-bottom: 8px;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.025em;
     }
     
     .box-name {
-      font-size: 17px;
+      font-size: 14px;
       font-weight: bold;
-      color: #1e3a5f;
-      margin-bottom: 8px;
+      color: #1e3a8a;
+      margin-bottom: 2px;
     }
     
     .box.client .box-name {
@@ -178,8 +224,7 @@ function generateInvoiceHTML(invoice, logoBase64) {
     .box-text {
       font-size: 13px;
       color: #4b5563;
-      line-height: 1.5;
-      margin-bottom: 3px;
+      line-height: 1.35;
     }
     
     .box-text.red {
@@ -187,22 +232,34 @@ function generateInvoiceHTML(invoice, logoBase64) {
       font-weight: bold;
     }
     
+    .meta-columns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
     .meta-box {
       background: #f3f4f6;
-      border: 1px solid #d1d5db;
-      border-radius: 3px;
-      padding: 6px 10px;
+      border-radius: 2px;
+      padding: 8px 12px;
       font-size: 13px;
       display: flex;
       align-items: center;
-      gap: 10px;
-      margin-bottom: 4px;
-      min-height: 20px;
+      gap: 8px;
+      margin-bottom: 6px;
+      min-height: 32px;
     }
     
     .meta-label {
+      width: 144px;
+      flex: 0 0 auto;
       font-weight: bold;
       color: #374151;
+    }
+
+    .meta-columns > div:first-child .meta-label {
+      width: 112px;
     }
     
     .meta-value {
@@ -217,17 +274,16 @@ function generateInvoiceHTML(invoice, logoBase64) {
     table {
       width: 100%;
       border-collapse: collapse;
-      margin: 18px 0 10px 0;
-      border-radius: 4px;
-      overflow: hidden;
+      margin: 0 0 24px 0;
+      table-layout: fixed;
     }
     
     th {
       background: #1e3a5f;
       color: white;
       font-size: 13px;
-      font-weight: bold;
-      padding: 8px;
+      font-weight: 600;
+      padding: 10px;
       text-align: left;
       border: 1px solid #1e3a5f;
     }
@@ -242,13 +298,12 @@ function generateInvoiceHTML(invoice, logoBase64) {
     
     td {
       font-size: 13px;
-      padding: 8px;
+      padding: 10px;
       border: 1px solid #d1d5db;
       color: #374151;
-    }
-    
-    tr:nth-child(even) td {
-      background: #f9fafb;
+      vertical-align: top;
+      overflow-wrap: anywhere;
+      word-break: normal;
     }
     
     td.center {
@@ -263,25 +318,52 @@ function generateInvoiceHTML(invoice, logoBase64) {
       font-weight: bold;
       color: #111827;
     }
+
+    .service-cell {
+      line-height: 1.35;
+      white-space: normal;
+    }
+
+    .description-cell {
+      white-space: normal;
+    }
     
     .description-detail {
       font-size: 11px;
       color: #6b7280;
-      margin-top: 2px;
-      line-height: 1.4;
+      line-height: 1.35;
+      margin-bottom: 2px;
+    }
+
+    .detail-line {
+      display: flex;
+      gap: 4px;
+      align-items: flex-start;
+    }
+
+    .detail-dash {
+      flex: 0 0 auto;
+      color: #9ca3af;
+    }
+
+    .detail-text {
+      flex: 1 1 auto;
+      min-width: 0;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
     }
     
     .totals {
       margin-left: auto;
-      width: 220px;
-      margin-top: 10px;
+      width: 320px;
+      margin-bottom: 32px;
     }
     
     .total-row {
       display: flex;
       justify-content: space-between;
-      padding: 5px 10px;
-      border: 1px solid #d1d5db;
+      padding: 8px 16px;
+      border: 1px solid #e5e7eb;
       font-size: 13px;
     }
     
@@ -299,18 +381,31 @@ function generateInvoiceHTML(invoice, logoBase64) {
       color: white;
       font-weight: bold;
       font-size: 15px;
-      padding: 8px 10px;
-      border-radius: 3px;
+      padding: 12px 16px;
       margin-top: 2px;
+    }
+
+    .payment-section {
+      margin-bottom: 32px;
+    }
+
+    .payment-section .thin-line {
+      margin-bottom: 16px;
     }
     
     .section-title {
       font-size: 14px;
       font-weight: bold;
-      color: #1e3a5f;
-      margin: 15px 0 8px 0;
+      color: #1e3a8a;
+      margin: 0 0 16px 0;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.025em;
+    }
+
+    .payment-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
     }
     
     .payment-item {
@@ -340,8 +435,8 @@ function generateInvoiceHTML(invoice, logoBase64) {
     .signatures {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 20px;
-      margin-top: 20px;
+      gap: 48px;
+      margin-top: 56px;
     }
     
     .signature-box {
@@ -352,7 +447,7 @@ function generateInvoiceHTML(invoice, logoBase64) {
     
     .signature-line {
       border-top: 0.5px solid #9ca3af;
-      margin-top: 30px;
+      margin-top: 64px;
       padding-top: 8px;
       font-size: 11px;
       color: #9ca3af;
@@ -362,35 +457,48 @@ function generateInvoiceHTML(invoice, logoBase64) {
     .footer-message {
       text-align: center;
       font-size: 15px;
-      color: #1e3a5f;
-      margin: 15px 0 10px 0;
+      color: #1e3a8a;
+      margin: 40px 0 12px 0;
       font-style: italic;
+      font-weight: 500;
     }
     
     .footer-bar {
       background: #1e3a5f;
       color: white;
-      padding: 8px 12px;
+      padding: 8px 16px;
       text-align: center;
-      font-size: 11px;
+      font-size: 12px;
       display: flex;
       justify-content: center;
-      gap: 15px;
-      border-radius: 4px;
+      align-items: center;
+      gap: 16px;
+      border-radius: 2px;
+    }
+
+    .footer-separator {
+      border-top: 1px solid #d1d5db;
+      margin-top: 40px;
     }
   </style>
 </head>
 <body>
+<div class="invoice-page">
   <!-- Header -->
   <div class="header">
-    ${logoBase64 ? `<img src="${logoBase64}" class="logo" alt="Logo" />` : ''}
-    <div class="company-name">${companyInfo.name || 'DevGroup Africa'}</div>
+    <div class="brand">
+      ${logoBase64 ? `<img src="${logoBase64}" class="logo" alt="Logo" />` : ''}
+      <div class="company-name">${escapeHtml(companyInfo.name || 'DevGroup Africa')}</div>
+    </div>
   </div>
   
   <div class="blue-line"></div>
   
   <!-- Title -->
-  <div class="title">FACTURE</div>
+  <div class="title-row">
+    <div class="title-accent"></div>
+    <div class="title">FACTURE</div>
+  </div>
   
   <div class="thin-line"></div>
   
@@ -398,32 +506,34 @@ function generateInvoiceHTML(invoice, logoBase64) {
   <div class="two-columns">
     <div class="box emitter">
       <div class="box-title">ÉMETTEUR</div>
-      <div class="box-name">${companyInfo.name || 'DevGroup Africa'}</div>
-      ${companyInfo.address ? `<div class="box-text">${companyInfo.address}</div>` : ''}
-      ${companyInfo.email ? `<div class="box-text">${companyInfo.email}</div>` : ''}
-      ${companyInfo.phone ? `<div class="box-text">${companyInfo.phone}</div>` : ''}
+      <div class="box-name">${escapeHtml(companyInfo.name || 'DevGroup Africa')}</div>
+      ${companyInfo.city ? `<div class="box-text">${escapeHtml(companyInfo.city)}</div>` : ''}
+      ${companyInfo.email ? `<div class="box-text">${escapeHtml(companyInfo.email)}</div>` : ''}
+      ${companyInfo.website ? `<div class="box-text">${escapeHtml(companyInfo.website)}</div>` : ''}
+      ${companyInfo.phone ? `<div class="box-text">${escapeHtml(companyInfo.phone)}</div>` : ''}
     </div>
     
     <div class="box client">
       <div class="box-title">CLIENT</div>
-      <div class="box-name">${client.name || ''}</div>
-      ${client.company ? `<div class="box-text">Entreprise: ${client.company}</div>` : ''}
-      ${client.phone ? `<div class="box-text red">Numéro: ${client.phone}</div>` : ''}
-      ${client.email ? `<div class="box-text">${client.email}</div>` : ''}
+      <div class="box-name">${escapeHtml(client.name || '')}</div>
+      ${client.company ? `<div class="box-text">Nom: ${escapeHtml(client.company)}</div>` : ''}
+      ${client.phone ? `<div class="box-text red">Numéro: ${escapeHtml(client.phone)}</div>` : ''}
+      ${client.email ? `<div class="box-text">${escapeHtml(client.email)}</div>` : ''}
+      ${client.taxNumber ? `<div class="box-text">${escapeHtml(client.taxNumber)}</div>` : ''}
     </div>
   </div>
   
   <!-- Meta Info -->
-  <div class="two-columns">
+  <div class="meta-columns">
     <div>
       <div class="meta-box">
         <span class="meta-label">N° Facture :</span>
-        <span class="meta-value blue">${invoice.number}</span>
+        <span class="meta-value blue">${escapeHtml(invoice.number)}</span>
       </div>
-      <div class="meta-box">
+      ${invoice.object ? `<div class="meta-box">
         <span class="meta-label">Objet :</span>
-        <span class="meta-value">${invoice.object || '—'}</span>
-      </div>
+        <span class="meta-value">${escapeHtml(invoice.object)}</span>
+      </div>` : ''}
     </div>
     <div>
       <div class="meta-box">
@@ -439,25 +549,32 @@ function generateInvoiceHTML(invoice, logoBase64) {
   
   <!-- Items Table -->
   <table>
+    <colgroup>
+      <col style="width: 6%;">
+      <col style="width: 21%;">
+      <col style="width: 34%;">
+      <col style="width: 11%;">
+      <col style="width: 14%;">
+      <col style="width: 14%;">
+    </colgroup>
     <thead>
       <tr>
-        <th class="center" style="width: 25px;">#</th>
-        <th style="width: 95px;">Service / produit</th>
-        <th style="width: 155px;">Description du service / produit</th>
-        <th class="center" style="width: 50px;">Quantité</th>
-        <th class="right" style="width: 65px;">Prix unitaire</th>
-        <th class="right" style="width: 65px;">Montant</th>
+        <th class="center">#</th>
+        <th>Service / produit</th>
+        <th>Description du service / produit</th>
+        <th class="center">Quantité</th>
+        <th class="right">Prix unitaire</th>
+        <th class="right">Montant</th>
       </tr>
     </thead>
     <tbody>
-      ${invoice.items.map((item, idx) => `
+      ${items.map((item, idx) => `
         <tr>
           <td class="center">${idx + 1}</td>
-          <td class="bold">${item.description}</td>
-          <td>
+          <td class="bold service-cell">${escapeHtml(item.description)}</td>
+          <td class="description-cell">
             ${item.detailedDescription ? 
-              item.detailedDescription.split('\n').slice(0, 2).map(line => `<div class="description-detail">${line}</div>`).join('') +
-              (item.detailedDescription.split('\n').length > 2 ? '<div class="description-detail">...</div>' : '')
+              renderDetailedDescription(item.detailedDescription)
               : '<span style="color: #9ca3af;">-</span>'}
           </td>
           <td class="center">${item.quantity}</td>
@@ -471,7 +588,7 @@ function generateInvoiceHTML(invoice, logoBase64) {
   <!-- Totals -->
   <div class="totals">
     <div class="total-row">
-      <span>Sous total HT</span>
+      <span>Sous-total HT</span>
       <span><strong>${formatCurrency(invoice.subtotal)}</strong></span>
     </div>
     ${invoice.discountRate > 0 ? `
@@ -480,47 +597,40 @@ function generateInvoiceHTML(invoice, logoBase64) {
         <span><strong>-${formatCurrency(invoice.discountAmount)}</strong></span>
       </div>
     ` : ''}
-    <div class="total-row">
-      <span>TVA (${invoice.taxRate}%)</span>
-      <span><strong>${formatCurrency(invoice.taxAmount)}</strong></span>
-    </div>
     <div class="total-row final">
       <span>TOTAL TTC</span>
       <span>${formatCurrency(invoice.total)}</span>
     </div>
   </div>
   
-  <div class="thin-line" style="margin-top: 15px;"></div>
-  
   <!-- Payment Info -->
   ${(invoice.paymentInfo?.mobileMoney?.length || invoice.paymentInfo?.bankAccounts?.length) ? `
-    <div class="section-title">INFORMATIONS DE PAIEMENT</div>
-    ${invoice.paymentInfo.mobileMoney?.map(mm => `
-      <div class="payment-item">
-        <div class="payment-title">${mm.provider} :</div>
-        <div class="payment-text">${mm.provider} : ${mm.number}</div>
-        <div class="payment-text">Au nom de : ${mm.name}</div>
+    <div class="payment-section">
+      <div class="thin-line"></div>
+      <div class="section-title">INFORMATIONS DE PAIEMENT</div>
+      <div class="payment-grid">
+        ${invoice.paymentInfo.mobileMoney?.map(mm => `
+          <div class="payment-item">
+            <div class="payment-title">${escapeHtml(mm.provider)} :</div>
+            <div class="payment-text">${escapeHtml(mm.provider)} : ${escapeHtml(mm.number)}</div>
+            <div class="payment-text">Au nom de : ${escapeHtml(mm.name)}</div>
+          </div>
+        `).join('') || ''}
+        ${invoice.paymentInfo.bankAccounts?.map(bank => `
+          <div class="payment-item">
+            <div class="payment-title">${escapeHtml(bank.bankName)} :</div>
+            <div class="payment-text">${escapeHtml(bank.bankName)} : ${escapeHtml(bank.accountNumber)}</div>
+            <div class="payment-text">Au nom de : ${escapeHtml(bank.accountName)}</div>
+          </div>
+        `).join('') || ''}
       </div>
-    `).join('') || ''}
-    ${invoice.paymentInfo.bankAccounts?.map(bank => `
-      <div class="payment-item">
-        <div class="payment-title">${bank.bankName} :</div>
-        <div class="payment-text">${bank.bankName} : ${bank.accountNumber}</div>
-        <div class="payment-text">Au nom de : ${bank.accountName}</div>
-      </div>
-    `).join('') || ''}
+    </div>
   ` : ''}
-  
-  <!-- Terms -->
-  ${invoice.terms ? `
-    <div class="section-title">Conditions de paiement :</div>
-    <div class="conditions-text">${invoice.terms}</div>
-  ` : ''}
-  
+
   <!-- Signatures -->
   <div class="signatures">
     <div class="signature-box">
-      Signature / Cachet DevGroup Africa
+      Signature / Cachet ${escapeHtml(companyInfo.name || 'DevGroup Africa')}
       <div class="signature-line">Nom & Qualité : ___________________________</div>
     </div>
     <div class="signature-box">
@@ -530,12 +640,14 @@ function generateInvoiceHTML(invoice, logoBase64) {
   </div>
   
   <!-- Footer -->
+  <div class="footer-separator"></div>
   <div class="footer-message">Merci pour votre confiance !</div>
   <div class="footer-bar">
-    ${companyInfo.email ? `<span>✉ ${companyInfo.email}</span>` : ''}
-    ${companyInfo.phone ? `<span>✆ ${companyInfo.phone}</span>` : ''}
-    ${companyInfo.city ? `<span>📍 ${companyInfo.city}</span>` : ''}
+    ${companyInfo.email ? `<span>${escapeHtml(companyInfo.email)}</span>` : ''}
+    ${companyInfo.phone ? `<span>${escapeHtml(companyInfo.phone)}</span>` : ''}
+    ${companyInfo.city ? `<span>${escapeHtml(companyInfo.city)}</span>` : ''}
   </div>
+</div>
 </body>
 </html>
   `;
