@@ -52,6 +52,10 @@ const FormStep = <T,>({
   };
 
   const renderField = (field: any) => {
+    if (typeof field.visibleWhen === 'function' && !field.visibleWhen(formData)) {
+      return null;
+    }
+
     const value = getNestedValue(formData, field.name);
     const error = errors[field.name];
     const isFocused = focusedField === field.name;

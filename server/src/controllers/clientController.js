@@ -1,5 +1,17 @@
 import { Client } from '../models/Client.js';
 import { asyncHandler } from '../middleware/validation.js';
+import mongoose from 'mongoose';
+
+const isValidObjectId = (id) => mongoose.Types.ObjectId.isValid(id);
+
+const validateClientId = (id, res) => {
+  if (!isValidObjectId(id)) {
+    res.status(400).json({ message: 'Identifiant client invalide' });
+    return false;
+  }
+
+  return true;
+};
 
 export const getClients = asyncHandler(async (req, res) => {
   const { search, isActive } = req.query;
@@ -27,6 +39,8 @@ export const getClients = asyncHandler(async (req, res) => {
 });
 
 export const getClient = asyncHandler(async (req, res) => {
+  if (!validateClientId(req.params.id, res)) return;
+
   const client = await Client.findById(req.params.id);
   
   if (!client) {
@@ -40,7 +54,7 @@ export const getClient = asyncHandler(async (req, res) => {
 });
 
 export const createClient = asyncHandler(async (req, res) => {
-  const { name, email, phone, company, address, paymentTerms, creditLimit, taxNumber } = req.body;
+  const { name, clientType = 'particulier', email, phone, company, address, paymentTerms, creditLimit, taxNumber } = req.body;
   
   // Vérifier si l'email existe déjà
   if (email) {
@@ -52,11 +66,12 @@ export const createClient = asyncHandler(async (req, res) => {
   
   const client = await Client.create({
     name,
+    clientType,
     email,
     phone,
     company,
     address,
-    paymentTerms: paymentTerms || 30,
+    paymentTerms: paymentTerms || 0,
     creditLimit: creditLimit || 0,
     taxNumber
   });
@@ -68,7 +83,9 @@ export const createClient = asyncHandler(async (req, res) => {
 });
 
 export const updateClient = asyncHandler(async (req, res) => {
-  const { name, email, phone, company, address, paymentTerms, creditLimit, taxNumber, isActive } = req.body;
+  const { name, clientType, email, phone, company, address, paymentTerms, creditLimit, taxNumber, isActive } = req.body;
+
+  if (!validateClientId(req.params.id, res)) return;
   
   const client = await Client.findById(req.params.id);
   if (!client) {
@@ -85,6 +102,7 @@ export const updateClient = asyncHandler(async (req, res) => {
   
   // Mettre à jour les champs
   if (name) client.name = name;
+  if (clientType !== undefined) client.clientType = clientType;
   if (email !== undefined) client.email = email;
   if (phone !== undefined) client.phone = phone;
   if (company !== undefined) client.company = company;
@@ -103,6 +121,8 @@ export const updateClient = asyncHandler(async (req, res) => {
 });
 
 export const deleteClient = asyncHandler(async (req, res) => {
+  if (!validateClientId(req.params.id, res)) return;
+
   const client = await Client.findById(req.params.id);
   if (!client) {
     return res.status(404).json({ message: 'Client non trouvé' });
@@ -124,6 +144,8 @@ export const deleteClient = asyncHandler(async (req, res) => {
 });
 
 export const getClientStats = asyncHandler(async (req, res) => {
+  if (!validateClientId(req.params.id, res)) return;
+
   const client = await Client.findById(req.params.id);
   if (!client) {
     return res.status(404).json({ message: 'Client non trouvé' });

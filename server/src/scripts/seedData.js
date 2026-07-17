@@ -20,11 +20,11 @@ const seedData = async () => {
     const existingAdmin = await usersCollection.findOne({ email: 'admin@devgroup.cm' });
     
     if (!existingAdmin) {
-      const hashedPassword = await bcrypt.hash('admin123', 12);
+      const hashedPassword = await bcrypt.hash('#daniel@2026', 12);
       
       await usersCollection.insertOne({
         name: 'Administrateur DevGroup',
-        email: 'admin@devgroup.cm',
+        email: 'daniel@devgroup.ga',
         password: hashedPassword,
         role: 'admin',
         isActive: true,

@@ -8,6 +8,7 @@ import MultiStepFormContainer from './MultiStepFormContainer';
 interface ClientFormProps {
   client?: {
     _id: string;
+    clientType?: 'particulier' | 'entreprise' | 'administration' | 'association';
     name: string;
     email?: string;
     phone?: string;
@@ -31,6 +32,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ client, onSuccess, onCancel }) 
   const { toast } = useToast();
 
   interface ClientFormData {
+    clientType: 'particulier' | 'entreprise' | 'administration' | 'association';
     name: string;
     email?: string;
     phone?: string;
@@ -49,14 +51,22 @@ const ClientForm: React.FC<ClientFormProps> = ({ client, onSuccess, onCancel }) 
 
   const handleSubmit = async (data: ClientFormData) => {
     try {
+      const payload = {
+        ...data,
+        company: data.clientType === 'particulier' ? '' : data.company,
+        taxNumber: data.clientType === 'particulier' ? '' : data.taxNumber,
+        paymentTerms: data.clientType === 'particulier' ? 0 : Number(data.paymentTerms || 0),
+        creditLimit: data.clientType === 'particulier' ? 0 : Number(data.creditLimit || 0)
+      };
+
       if (client) {
-        await apiService.updateClient(client._id, data);
+        await apiService.updateClient(client._id, payload);
         toast({
           title: "Succès",
           description: "Client mis à jour avec succès",
         });
       } else {
-        await apiService.createClient(data);
+        await apiService.createClient(payload);
         toast({
           title: "Succès",
           description: "Client créé avec succès",
@@ -74,6 +84,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ client, onSuccess, onCancel }) 
   };
 
   const initialData: Partial<ClientFormData> = client ? {
+    clientType: client.clientType || (client.company ? 'entreprise' : 'particulier'),
     name: client.name || '',
     email: client.email || '',
     phone: client.phone || '',
@@ -88,7 +99,22 @@ const ClientForm: React.FC<ClientFormProps> = ({ client, onSuccess, onCancel }) 
     creditLimit: client.creditLimit || 0,
     taxNumber: client.taxNumber || '',
     isActive: client.isActive !== false
-  } : {};
+  } : {
+    clientType: 'particulier',
+    name: '',
+    email: '',
+    phone: '',
+    address: {
+      street: '',
+      city: '',
+      postalCode: '',
+      country: 'Cameroun'
+    },
+    paymentTerms: 0,
+    creditLimit: 0,
+    taxNumber: '',
+    isActive: true
+  };
 
   return (
     <div className="space-y-6">

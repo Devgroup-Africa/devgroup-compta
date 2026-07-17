@@ -12,7 +12,7 @@ import { formatXAF } from '@/data/mockData';
 interface Purchase {
   _id: string;
   purchaseNumber: string;
-  supplier: {
+  supplier?: {
     _id: string;
     name: string;
     company?: string;
@@ -287,14 +287,14 @@ export default function PurchaseDetailPage() {
               {/* Supplier (Fournisseur) */}
               <div className="p-4">
                 <p className="text-xs font-bold text-red-900 uppercase tracking-wide mb-2">FOURNISSEUR</p>
-                <p className="font-bold text-gray-900 text-sm">{purchase.supplier.name}</p>
-                {purchase.supplier.company && (
+                <p className="font-bold text-gray-900 text-sm">{purchase.supplier?.name || 'Non renseigné'}</p>
+                {purchase.supplier?.company && (
                   <p className="text-gray-700 text-xs mt-0.5">Entreprise: {purchase.supplier.company}</p>
                 )}
-                {purchase.supplier.phone && (
+                {purchase.supplier?.phone && (
                   <p className="text-red-600 text-xs font-medium">Téléphone: {purchase.supplier.phone}</p>
                 )}
-                {purchase.supplier.email && <p className="text-gray-600 text-xs">{purchase.supplier.email}</p>}
+                {purchase.supplier?.email && <p className="text-gray-600 text-xs">{purchase.supplier.email}</p>}
               </div>
             </div>
 

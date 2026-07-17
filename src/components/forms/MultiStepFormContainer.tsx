@@ -6,7 +6,6 @@ import FormStep from './FormStep';
 import LivePreviewPanel from './LivePreviewPanel';
 import StepNavigator from './StepNavigator';
 import { FormConfiguration, MultiStepFormState, FormFieldConfig } from './types';
-import { formatXAF } from '@/data/mockData';
 
 interface MultiStepFormContainerProps<T> {
   formType: 'client' | 'supplier' | 'invoice' | 'journalEntry' | 'bankAccount' | 'transaction' | 'transfer';
@@ -33,6 +32,18 @@ const MultiStepFormContainer = <T,>({
   });
   const [focusedField, setFocusedField] = useState<string | undefined>(undefined);
   const [clients, setClients] = useState<Array<{ value: string; label: string }>>([]);
+
+  const getFieldValue = useCallback((data: any, path: string) => {
+    if (!path.includes('.')) {
+      return data?.[path];
+    }
+
+    return path.split('.').reduce((current, key) => current?.[key], data);
+  }, []);
+
+  const isFieldVisible = useCallback((field: any, formData: T) => {
+    return typeof field.visibleWhen === 'function' ? field.visibleWhen(formData) : true;
+  }, []);
 
   // Load clients for invoice form
   useEffect(() => {
@@ -65,16 +76,36 @@ const MultiStepFormContainer = <T,>({
           description: 'Saisissez les informations de base du client',
           fields: [
             {
+              name: 'clientType',
+              label: 'Type de client',
+              type: 'select',
+              required: true,
+              options: [
+                { value: 'particulier', label: 'Particulier' },
+                { value: 'entreprise', label: 'Entreprise' },
+                { value: 'administration', label: 'Administration' },
+                { value: 'association', label: 'Association' }
+              ],
+              guide: {
+                title: 'Type de client',
+                description: 'Le formulaire s\'adapte au profil choisi',
+                tips: [
+                  'Particulier: coordonnées simples',
+                  'Entreprise ou organisation: infos fiscales et raison sociale'
+                ]
+              },
+              validation: [{ type: 'required', message: 'Le type de client est obligatoire' }]
+            },
+            {
               name: 'name',
-              label: 'Nom complet',
+              label: 'Nom / contact principal',
               type: 'text',
               required: true,
               guide: {
                 title: 'Nom du client',
-                description: 'Entrez le nom complet du client ou de l\'entreprise',
-                example: 'Jean Dupont ou SARL Dupont',
+                description: 'Nom complet pour un particulier ou contact principal pour une organisation',
+                example: 'Jean Dupont',
                 tips: [
-                  'Utilisez le nom officiel pour les entreprises',
                   'Vérifiez l\'orthographe avant de continuer'
                 ]
               },
@@ -109,14 +140,16 @@ const MultiStepFormContainer = <T,>({
             },
             {
               name: 'company',
-              label: 'Entreprise',
+              label: 'Raison sociale',
               type: 'text',
-              required: false,
+              required: true,
+              visibleWhen: (data: any) => data.clientType && data.clientType !== 'particulier',
               guide: {
-                title: 'Nom de l\'entreprise',
-                description: 'Nom de l\'entreprise si différent du nom du client',
-                example: 'SARL Dupont ou SAS Jean Dupont'
-              }
+                title: 'Raison sociale',
+                description: 'Nom officiel de l\'entreprise ou de l\'organisation',
+                example: 'DEVGROUP AFRICA SARL'
+              },
+              validation: [{ type: 'required', message: 'La raison sociale est obligatoire' }]
             },
             {
               name: 'address.street',
@@ -156,10 +189,11 @@ const MultiStepFormContainer = <T,>({
               label: 'Délai de paiement',
               type: 'number',
               required: false,
+              visibleWhen: (data: any) => data.clientType && data.clientType !== 'particulier',
               guide: {
                 title: 'Délai de paiement (jours)',
                 description: 'Nombre de jours accordés au client pour payer',
-                example: '30',
+                example: '0',
                 tips: ['Standard: 30 jours', 'Peut varier selon le client']
               }
             },
@@ -168,6 +202,7 @@ const MultiStepFormContainer = <T,>({
               label: 'Limite de crédit',
               type: 'number',
               required: false,
+              visibleWhen: (data: any) => data.clientType && data.clientType !== 'particulier',
               guide: {
                 title: 'Limite de crédit',
                 description: 'Montant maximum de crédit accordé au client',
@@ -180,6 +215,7 @@ const MultiStepFormContainer = <T,>({
               label: 'Numéro fiscal',
               type: 'text',
               required: false,
+              visibleWhen: (data: any) => data.clientType && data.clientType !== 'particulier',
               guide: {
                 title: 'Numéro fiscal',
                 description: 'Numéro d\'identification fiscale du client',
@@ -274,7 +310,7 @@ const MultiStepFormContainer = <T,>({
               guide: {
                 title: 'Délai de paiement (jours)',
                 description: 'Nombre de jours pour payer les factures',
-                example: '30'
+                example: '0'
               }
             },
             {
@@ -533,8 +569,8 @@ const MultiStepFormContainer = <T,>({
   const validateStep = useCallback((stepFields: FormFieldConfig[], formData: T): Record<string, string> => {
     const errors: Record<string, string> = {};
     
-    stepFields.forEach(field => {
-      const value = (formData as any)[field.name];
+    stepFields.filter(field => isFieldVisible(field, formData)).forEach(field => {
+      const value = getFieldValue(formData, field.name);
       const error = validateField(field, value);
       if (error) {
         errors[field.name] = error;
@@ -542,14 +578,14 @@ const MultiStepFormContainer = <T,>({
     });
     
     return errors;
-  }, [validateField]);
+  }, [getFieldValue, isFieldVisible, validateField]);
 
   const validateAllFields = useCallback((formData: T): Record<string, string> => {
     const errors: Record<string, string> = {};
     
     currentConfig.steps.forEach(step => {
-      step.fields.forEach(field => {
-        const value = (formData as any)[field.name];
+      step.fields.filter((field: any) => isFieldVisible(field, formData)).forEach(field => {
+        const value = getFieldValue(formData, field.name);
         const error = validateField(field, value);
         if (error) {
           errors[field.name] = error;
@@ -558,7 +594,7 @@ const MultiStepFormContainer = <T,>({
     });
     
     return errors;
-  }, [currentConfig, validateField]);
+  }, [currentConfig, getFieldValue, isFieldVisible, validateField]);
 
   // Handle field changes
   const handleFieldChange = useCallback((field: string, value: any) => {
@@ -584,6 +620,13 @@ const MultiStepFormContainer = <T,>({
       } else {
         newData[field] = value;
       }
+
+      if (formType === 'client' && field === 'clientType' && value === 'particulier') {
+        newData.company = '';
+        newData.taxNumber = '';
+        newData.paymentTerms = 0;
+        newData.creditLimit = 0;
+      }
       
       return {
         ...prev,
@@ -591,7 +634,7 @@ const MultiStepFormContainer = <T,>({
         isDirty: true
       };
     });
-  }, []);
+  }, [formType]);
 
   // Handle field focus
   const handleFieldFocus = useCallback((field: string) => {
@@ -605,14 +648,14 @@ const MultiStepFormContainer = <T,>({
       .find((f: any) => f.name === field);
     
     if (fieldConfig) {
-      const error = validateField(fieldConfig, (state.formData as any)[field]);
+      const error = validateField(fieldConfig, getFieldValue(state.formData, field));
       setState(prev => ({
         ...prev,
         errors: { ...prev.errors, [field]: error }
       }));
     }
     setFocusedField(undefined);
-  }, [currentConfig, state.formData, validateField]);
+  }, [currentConfig, getFieldValue, state.formData, validateField]);
 
   // Handle next step
   const handleNext = useCallback(() => {
@@ -682,14 +725,14 @@ const MultiStepFormContainer = <T,>({
   const canGoBack = state.currentStep > 1;
 
   return (
-    <div className="grid grid-cols-12 gap-6 min-h-screen">
+    <div className="grid gap-5 xl:grid-cols-[260px_minmax(0,1fr)_360px]">
       {/* Zone de guides contextuels à gauche */}
-      <div className="col-span-3 space-y-4">
-        <div className="sticky top-6">
-          <Card className="bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800">
-            <CardHeader>
-              <CardTitle className="text-lg flex items-center gap-2">
-                <span className="text-blue-600 dark:text-blue-400">💡</span>
+      <div className="order-2 xl:order-1">
+        <div className="xl:sticky xl:top-6">
+          <Card className="border-slate-200 bg-slate-50/80 shadow-none dark:border-slate-800 dark:bg-slate-900/40">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-base flex items-center gap-2">
+                <span className="h-2 w-2 rounded-full bg-primary" />
                 Aide contextuelle
               </CardTitle>
             </CardHeader>
@@ -715,7 +758,7 @@ const MultiStepFormContainer = <T,>({
                         {fieldConfig.guide.example && (
                           <div className="bg-white dark:bg-gray-800 rounded-lg p-3 border border-blue-200 dark:border-blue-700">
                             <p className="text-xs font-medium text-blue-600 dark:text-blue-400 mb-1">
-                              💡 Exemple
+                              Exemple
                             </p>
                             <p className="text-sm text-gray-700 dark:text-gray-300 font-mono">
                               {fieldConfig.guide.example}
@@ -731,7 +774,7 @@ const MultiStepFormContainer = <T,>({
                             <ul className="space-y-1">
                               {fieldConfig.guide.tips.map((tip, index) => (
                                 <li key={index} className="text-sm text-gray-700 dark:text-gray-300 flex items-start gap-2">
-                                  <span className="text-blue-500 mt-0.5">•</span>
+                                  <span className="text-blue-500 mt-0.5">-</span>
                                   <span>{tip}</span>
                                 </li>
                               ))}
@@ -759,8 +802,8 @@ const MultiStepFormContainer = <T,>({
       </div>
 
       {/* Formulaire au centre */}
-      <div className="col-span-5 space-y-6">
-        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm">
+      <div className="order-1 space-y-5 xl:order-2">
+        <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-950">
           {currentStepConfig && (
             <FormStep
               stepNumber={currentStepConfig.stepNumber}
@@ -790,8 +833,8 @@ const MultiStepFormContainer = <T,>({
       </div>
 
       {/* Aperçu à droite */}
-      <div className="col-span-4">
-        <div className="sticky top-6">
+      <div className="order-3">
+        <div className="xl:sticky xl:top-6">
           <LivePreviewPanel
             formType={formType}
             formData={state.formData}

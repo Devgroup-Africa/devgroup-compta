@@ -91,7 +91,7 @@ export default function PurchaseFormPage() {
       const response = await api.getPurchaseById(id!);
       const purchase = response.data as any; 
       setForm({
-        supplier: purchase.supplier._id,
+        supplier: purchase.supplier?._id || '',
         bankAccount: purchase.bankAccount?._id || '',
         date: purchase.date.split('T')[0],
         dueDate: purchase.dueDate ? purchase.dueDate.split('T')[0] : '',
@@ -151,11 +151,6 @@ export default function PurchaseFormPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!form.supplier) {
-      showError('Veuillez sélectionner un fournisseur', 'Champ requis');
-      return;
-    }
-
     if (!form.bankAccount) {
       showError('Veuillez sélectionner un compte bancaire', 'Champ requis');
       return;
@@ -172,6 +167,7 @@ export default function PurchaseFormPage() {
       
       const purchaseData = {
         ...form,
+        supplier: form.supplier || null,
         subtotal,
         taxAmount,
         total
@@ -238,15 +234,14 @@ export default function PurchaseFormPage() {
           <CardContent className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="supplier">Fournisseur *</Label>
+                <Label htmlFor="supplier">Fournisseur</Label>
                 <select
                   id="supplier"
                   value={form.supplier}
                   onChange={(e) => setForm({ ...form, supplier: e.target.value })}
                   className="w-full border border-input bg-background rounded-md px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                  required
                 >
-                  <option value="">Sélectionner un fournisseur</option>
+                  <option value="">Aucun fournisseur</option>
                   {Array.isArray(suppliers) && suppliers.map((supplier) => (
                     <option key={supplier._id} value={supplier._id}>
                       {supplier.name} {supplier.company ? `(${supplier.company})` : ''}

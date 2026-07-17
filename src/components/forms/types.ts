@@ -19,12 +19,13 @@ export interface ValidationRule {
 export interface FormFieldConfig {
   name: string;
   label: string;
-  type: 'text' | 'email' | 'number' | 'date' | 'select' | 'textarea' | 'checkbox';
+  type: 'text' | 'email' | 'number' | 'date' | 'select' | 'textarea' | 'checkbox' | 'items' | 'companyInfo' | 'paymentInfo';
   required: boolean;
   guide: ContextualGuide;
   validation?: ValidationRule[];
   options?: { value: string; label: string }[];
   placeholder?: string;
+  visibleWhen?: (data: any) => boolean;
 }
 
 export interface FormStepConfig {

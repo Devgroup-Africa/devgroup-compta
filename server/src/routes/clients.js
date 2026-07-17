@@ -19,14 +19,14 @@ const createClientValidation = [
   body('email').optional().isEmail().withMessage('Email invalide'),
   body('phone').optional().trim(),
   body('company').optional().trim(),
-  body('paymentTerms').optional().isInt({ min: 1 }).withMessage('Délai de paiement invalide'),
+  body('paymentTerms').optional().isInt({ min: 0 }).withMessage('Délai de paiement invalide'),
   body('creditLimit').optional().isFloat({ min: 0 }).withMessage('Limite de crédit invalide')
 ];
 
 const updateClientValidation = [
   body('name').optional().trim().notEmpty().withMessage('Le nom ne peut pas être vide'),
   body('email').optional().isEmail().withMessage('Email invalide'),
-  body('paymentTerms').optional().isInt({ min: 1 }).withMessage('Délai de paiement invalide'),
+  body('paymentTerms').optional().isInt({ min: 0 }).withMessage('Délai de paiement invalide'),
   body('creditLimit').optional().isFloat({ min: 0 }).withMessage('Limite de crédit invalide'),
   body('isActive').optional().isBoolean().withMessage('isActive doit être un booléen')
 ];

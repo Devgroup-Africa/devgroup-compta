@@ -21,7 +21,7 @@ import { formatXAF } from '@/data/mockData';
 interface Purchase {
   _id: string;
   purchaseNumber: string;
-  supplier: {
+  supplier?: {
     _id: string;
     name: string;
     company?: string;
@@ -106,8 +106,8 @@ export default function PurchasesPage() {
 
   const filteredPurchases = purchases.filter(purchase =>
     purchase.purchaseNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    purchase.supplier.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    purchase.supplier.company?.toLowerCase().includes(searchTerm.toLowerCase())
+    purchase.supplier?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    purchase.supplier?.company?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const stats = {
@@ -247,8 +247,8 @@ export default function PurchasesPage() {
                   <TableCell className="font-medium">{purchase.purchaseNumber}</TableCell>
                   <TableCell>
                     <div>
-                      <div className="font-medium">{purchase.supplier.name}</div>
-                      {purchase.supplier.company && (
+                      <div className="font-medium">{purchase.supplier?.name || 'Non renseigné'}</div>
+                      {purchase.supplier?.company && (
                         <div className="text-sm text-muted-foreground">{purchase.supplier.company}</div>
                       )}
                     </div>

@@ -9,12 +9,13 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
-import { Plus, Search, Edit, Trash2, Mail, Phone, Building, User, Eye } from "lucide-react";
+import { Plus, Search, Edit, Trash2, Mail, Phone, Building, User, Eye, MapPin } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 
 interface Client {
   _id: string;
+  clientType?: "particulier" | "entreprise" | "administration" | "association";
   name: string;
   email?: string;
   phone?: string;
@@ -198,8 +199,8 @@ const ClientsPage = () => {
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
-                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                        {client.company ? (
+                      <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                        {client.clientType && client.clientType !== "particulier" ? (
                           <Building className="w-5 h-5 text-primary" />
                         ) : (
                           <User className="w-5 h-5 text-primary" />
@@ -213,6 +214,9 @@ const ClientsPage = () => {
                       </div>
                       <Badge variant={client.isActive ? "default" : "secondary"}>
                         {client.isActive ? "Actif" : "Inactif"}
+                      </Badge>
+                      <Badge variant="outline" className="capitalize">
+                        {client.clientType || (client.company ? "entreprise" : "particulier")}
                       </Badge>
                     </div>
 
@@ -245,8 +249,9 @@ const ClientsPage = () => {
                     </div>
 
                     {client.address?.city && (
-                      <div className="mt-2 text-sm text-gray-600">
-                        📍 {client.address.city}{client.address.country && `, ${client.address.country}`}
+                      <div className="mt-2 flex items-center gap-2 text-sm text-gray-600">
+                        <MapPin className="h-4 w-4" />
+                        <span>{client.address.city}{client.address.country && `, ${client.address.country}`}</span>
                       </div>
                     )}
                   </div>

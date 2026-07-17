@@ -8,7 +8,7 @@ const purchaseSchema = new mongoose.Schema({
   supplier: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Supplier',
-    required: [true, 'Le fournisseur est requis']
+    default: null
   },
   bankAccount: {
     type: mongoose.Schema.Types.ObjectId,

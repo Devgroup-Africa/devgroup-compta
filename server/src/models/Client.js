@@ -6,6 +6,11 @@ const clientSchema = new mongoose.Schema({
     required: [true, 'Le nom du client est requis'],
     trim: true
   },
+  clientType: {
+    type: String,
+    enum: ['particulier', 'entreprise', 'administration', 'association'],
+    default: 'particulier'
+  },
   email: {
     type: String,
     trim: true,

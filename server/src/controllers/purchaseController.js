@@ -4,6 +4,8 @@ import { BankAccount } from '../models/BankAccount.js';
 import { Transaction } from '../models/Transaction.js';
 import { AuditLog } from '../models/AuditLog.js';
 
+const getSupplierName = (supplier) => supplier?.name || 'Fournisseur non renseigné';
+
 // Créer une facture fournisseur
 export const createPurchase = async (req, res) => {
   try {
@@ -23,7 +25,7 @@ export const createPurchase = async (req, res) => {
       metadata: {
         purchaseId: purchase._id,
         purchaseNumber: purchase.purchaseNumber,
-        supplier: purchase.supplier.name,
+        supplier: getSupplierName(purchase.supplier),
         total: purchase.total
       }
     });
@@ -150,7 +152,7 @@ export const markPurchaseAsPaid = async (req, res) => {
       type: 'expense',
       category: 'Fournisseurs',
       amount: purchase.total,
-      description: `Paiement facture ${purchase.purchaseNumber} - ${purchase.supplier.name}`,
+      description: `Paiement facture ${purchase.purchaseNumber} - ${getSupplierName(purchase.supplier)}`,
       date: paymentDate || new Date(),
       status: 'confirmed',
       bankAccount: purchase.bankAccount._id,
@@ -172,10 +174,14 @@ export const markPurchaseAsPaid = async (req, res) => {
     purchase.transaction = transaction._id;
     await purchase.save();
 
-    // Mettre à jour les statistiques du fournisseur
-    const supplier = await Supplier.findById(purchase.supplier._id);
-    supplier.totalPaid = (supplier.totalPaid || 0) + purchase.total;
-    await supplier.save();
+    // Mettre à jour les statistiques du fournisseur si renseigné
+    if (purchase.supplier?._id) {
+      const supplier = await Supplier.findById(purchase.supplier._id);
+      if (supplier) {
+        supplier.totalPaid = (supplier.totalPaid || 0) + purchase.total;
+        await supplier.save();
+      }
+    }
 
     // Audit log
     await AuditLog.create({
@@ -314,10 +320,10 @@ export const exportPurchasePDF = async (req, res) => {
     if (companyInfo.phone) doc.text(companyInfo.phone);
 
     // Supplier info
-    doc.text(`Fournisseur: ${purchase.supplier.name}`, 350, 120);
-    if (purchase.supplier.company) doc.text(purchase.supplier.company);
-    if (purchase.supplier.phone) doc.text(purchase.supplier.phone);
-    if (purchase.supplier.email) doc.text(purchase.supplier.email);
+    doc.text(`Fournisseur: ${getSupplierName(purchase.supplier)}`, 350, 120);
+    if (purchase.supplier?.company) doc.text(purchase.supplier.company);
+    if (purchase.supplier?.phone) doc.text(purchase.supplier.phone);
+    if (purchase.supplier?.email) doc.text(purchase.supplier.email);
 
     doc.moveDown(2);
 
@@ -420,7 +426,7 @@ export const exportPurchaseExcel = async (req, res) => {
     worksheet.addRow(['N° Facture:', purchase.purchaseNumber]);
     worksheet.addRow(['Date:', new Date(purchase.date).toLocaleDateString('fr-FR')]);
     if (purchase.dueDate) worksheet.addRow(['Échéance:', new Date(purchase.dueDate).toLocaleDateString('fr-FR')]);
-    worksheet.addRow(['Fournisseur:', purchase.supplier.name]);
+    worksheet.addRow(['Fournisseur:', getSupplierName(purchase.supplier)]);
     if (purchase.bankAccount) worksheet.addRow(['Compte:', purchase.bankAccount.name]);
     worksheet.addRow(['Statut:', purchase.status]);
 
@@ -525,7 +531,7 @@ export const exportPurchasesListExcel = async (req, res) => {
     purchases.forEach(purchase => {
       worksheet.addRow([
         purchase.purchaseNumber,
-        purchase.supplier.name,
+        getSupplierName(purchase.supplier),
         new Date(purchase.date).toLocaleDateString('fr-FR'),
         purchase.dueDate ? new Date(purchase.dueDate).toLocaleDateString('fr-FR') : '',
         purchase.total,
@@ -581,9 +587,10 @@ export const getPurchaseStats = async (req, res) => {
 
     // Group by supplier
     purchases.forEach(purchase => {
-      const supplierId = purchase.supplier.toString();
+      const supplierId = purchase.supplier?.toString() || 'unspecified';
       if (!stats.bySupplier[supplierId]) {
         stats.bySupplier[supplierId] = {
+          name: purchase.supplier ? undefined : 'Fournisseur non renseigné',
           count: 0,
           totalAmount: 0,
           paidAmount: 0

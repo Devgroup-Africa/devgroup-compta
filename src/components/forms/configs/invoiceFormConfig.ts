@@ -2,28 +2,6 @@ export const invoiceFormConfig = {
   steps: [
     {
       stepNumber: 1,
-      title: 'Informations de l\'entreprise',
-      description: 'Renseignez les informations de votre entreprise',
-      fields: [
-        {
-          name: 'companyInfo',
-          label: 'Informations de l\'entreprise',
-          type: 'companyInfo',
-          required: false,
-          guide: {
-            title: 'Informations de l\'entreprise',
-            description: 'Ces informations apparaîtront sur vos factures',
-            tips: [
-              'Tous les champs sont optionnels',
-              'Le logo peut être téléchargé ou saisi via URL',
-              'Ces informations seront sauvegardées pour vos prochaines factures'
-            ]
-          }
-        }
-      ]
-    },
-    {
-      stepNumber: 2,
       title: 'Client et dates',
       description: 'Sélectionnez le client et les dates',
       fields: [
@@ -90,7 +68,7 @@ export const invoiceFormConfig = {
       ]
     },
     {
-      stepNumber: 3,
+      stepNumber: 2,
       title: 'Articles et montants',
       description: 'Ajoutez les articles de la facture',
       fields: [
@@ -153,48 +131,10 @@ export const invoiceFormConfig = {
       ]
     },
     {
-      stepNumber: 4,
-      title: 'Informations de paiement',
-      description: 'Ajoutez vos méthodes de paiement',
-      fields: [
-        {
-          name: 'paymentInfo',
-          label: 'Méthodes de paiement',
-          type: 'paymentInfo',
-          required: false,
-          guide: {
-            title: 'Informations de paiement',
-            description: 'Ajoutez vos comptes Mobile Money et bancaires',
-            tips: [
-              'Ces informations seront affichées sur la facture',
-              'Vous pouvez ajouter plusieurs méthodes de paiement',
-              'Tous les champs sont optionnels'
-            ]
-          }
-        }
-      ]
-    },
-    {
-      stepNumber: 5,
+      stepNumber: 3,
       title: 'Notes et conditions',
       description: 'Ajoutez des informations complémentaires',
       fields: [
-        {
-          name: 'notes',
-          label: 'Notes internes',
-          type: 'textarea',
-          required: false,
-          guide: {
-            title: 'Notes internes',
-            description: 'Notes visibles uniquement par votre équipe',
-            example: 'Facture pour le projet XYZ - Phase 1',
-            tips: [
-              'Ces notes ne sont PAS visibles sur la facture client',
-              'Utilisez-les pour des rappels internes',
-              'Mentionnez des détails sur le contexte de la facture'
-            ]
-          }
-        },
         {
           name: 'terms',
           label: 'Conditions de paiement',
@@ -215,7 +155,7 @@ export const invoiceFormConfig = {
       ]
     },
     {
-      stepNumber: 6,
+      stepNumber: 4,
       title: 'Vérification',
       description: 'Vérifiez toutes les informations avant de créer la facture',
       fields: []

@@ -2,6 +2,7 @@ import React from 'react';
 import { formatXAF } from '@/data/mockData';
 
 interface ClientFormData {
+  clientType?: 'particulier' | 'entreprise' | 'administration' | 'association';
   name?: string;
   email?: string;
   phone?: string;
@@ -26,8 +27,8 @@ const ClientPreviewRenderer: React.FC<ClientPreviewRendererProps> = ({ data }) =
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-3 mb-4">
-        <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-          {data.company ? (
+        <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
+          {data.clientType && data.clientType !== 'particulier' ? (
             <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
             </svg>
@@ -41,6 +42,9 @@ const ClientPreviewRenderer: React.FC<ClientPreviewRendererProps> = ({ data }) =
           <h3 className="font-semibold text-lg text-gray-900 dark:text-gray-100">
             {data.name || <span className="text-gray-400 italic">Nom du client</span>}
           </h3>
+          <p className="text-xs font-medium uppercase tracking-wide text-primary">
+            {data.clientType || 'particulier'}
+          </p>
           {data.company && (
             <p className="text-sm text-gray-600 dark:text-gray-400">{data.company}</p>
           )}
@@ -82,16 +86,24 @@ const ClientPreviewRenderer: React.FC<ClientPreviewRendererProps> = ({ data }) =
         </div>
       )}
 
-      <div className="pt-4 border-t border-gray-200 dark:border-gray-700 space-y-2">
-        <div className="flex justify-between text-sm">
-          <span className="text-gray-600 dark:text-gray-400">Délai de paiement:</span>
-          <span className="font-medium text-gray-900 dark:text-gray-100">{data.paymentTerms || 30} jours</span>
+      {data.clientType && data.clientType !== 'particulier' && (
+        <div className="pt-4 border-t border-gray-200 dark:border-gray-700 space-y-2">
+          <div className="flex justify-between text-sm">
+            <span className="text-gray-600 dark:text-gray-400">Délai de paiement:</span>
+            <span className="font-medium text-gray-900 dark:text-gray-100">{data.paymentTerms || 0} jours</span>
+          </div>
+          <div className="flex justify-between text-sm">
+            <span className="text-gray-600 dark:text-gray-400">Limite de crédit:</span>
+            <span className="font-medium text-gray-900 dark:text-gray-100">{formatXAF(data.creditLimit || 0)}</span>
+          </div>
+          {data.taxNumber && (
+            <div className="flex justify-between text-sm">
+              <span className="text-gray-600 dark:text-gray-400">N fiscal:</span>
+              <span className="font-mono text-gray-900 dark:text-gray-100">{data.taxNumber}</span>
+            </div>
+          )}
         </div>
-        <div className="flex justify-between text-sm">
-          <span className="text-gray-600 dark:text-gray-400">Limite de crédit:</span>
-          <span className="font-medium text-gray-900 dark:text-gray-100">{formatXAF(data.creditLimit || 0)}</span>
-        </div>
-      </div>
+      )}
     </div>
   );
 };
