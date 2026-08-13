@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "strict": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "paths": {
+      "@livrago/shared-types": ["packages/shared-types/src/index.ts"],
+      "@livrago/validation": ["packages/validation/src/index.ts"],
+      "@livrago/config": ["packages/config/src/index.ts"]
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "expo": {
+    "name": "LivraGo",
+    "slug": "livrago",
+    "scheme": "livrago",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": false,
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#16A34A"
+      }
+    }
+  }
+}

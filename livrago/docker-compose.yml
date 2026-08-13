@@ -1,0 +1,48 @@
+services:
+  mongo:
+    image: mongo:7
+    container_name: livrago-mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - livrago
+
+  mongo-express:
+    image: mongo-express:1
+    container_name: livrago-mongo-express
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
+    environment:
+      ME_CONFIG_MONGODB_URL: mongodb://mongo:27017/
+    depends_on:
+      - mongo
+    networks:
+      - livrago
+
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    container_name: livrago-api
+    restart: unless-stopped
+    ports:
+      - "4000:4000"
+    env_file:
+      - apps/api/.env
+    environment:
+      MONGODB_URI: mongodb://mongo:27017/livrago
+    depends_on:
+      - mongo
+    networks:
+      - livrago
+
+volumes:
+  mongo-data:
+
+networks:
+  livrago:
+    driver: bridge

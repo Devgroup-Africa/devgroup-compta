@@ -1,0 +1,13 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "strict": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@livrago/shared-types": ["../../packages/shared-types/src/index.ts"],
+      "@livrago/validation": ["../../packages/validation/src/index.ts"],
+      "@livrago/config": ["../../packages/config/src/index.ts"]
+    }
+  }
+}

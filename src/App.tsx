@@ -72,7 +72,7 @@ function AppRoutes() {
           </PublicRoute>
         }
       />
-      <Route
+        <Route
         path="/"
         element={
           <ProtectedRoute>
@@ -81,6 +81,7 @@ function AppRoutes() {
         }
       >
         <Route index element={<Dashboard />} />
+        <Route path="dashboard" element={<Dashboard />} />
         <Route path="plan-comptable" element={<ChartOfAccounts />} />
         <Route path="journal" element={<JournalPage />} />
         <Route path="grand-livre" element={<GeneralLedger />} />

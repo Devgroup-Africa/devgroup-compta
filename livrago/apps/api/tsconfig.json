@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": "src",
+    "types": ["node"],
+    "noEmitOnError": true,
+    "paths": {
+      "@livrago/shared-types": ["../../packages/shared-types/dist/index.d.ts"],
+      "@livrago/validation": ["../../packages/validation/dist/index.d.ts"],
+      "@livrago/config": ["../../packages/config/dist/index.d.ts"]
+    }
+  },
+  "include": ["src"]
+}
