@@ -4,7 +4,7 @@ import { asyncHandler } from '../middleware/validation.js';
 import { generateInvoicePDF } from '../services/pdfService.js';
 import { generateInvoiceWord } from '../services/wordService.js';
 import { generateInvoiceExcel } from '../services/excelService.js';
-import { generateInvoiceJPEG } from '../services/imageService.js';
+import { generateInvoiceJPEG, generateInvoicePreviewPDF } from '../services/imageService.js';
 import { sendInvoiceEmail } from '../services/emailService.js';
 
 // Export invoice as PDF
@@ -86,8 +86,8 @@ export const sendInvoiceByEmail = asyncHandler(async (req, res) => {
     return res.status(404).json({ message: 'Facture non trouvée' });
   }
   
-  // Générer le PDF à joindre
-  const pdfBuffer = await generateInvoicePDF(invoice);
+  // Utiliser le même rendu HTML que l'aperçu pour la pièce jointe PDF.
+  const pdfBuffer = await generateInvoicePreviewPDF(invoice);
   
   // Envoyer l'email
   const emailRecipient = recipientEmail || invoice.client.email;

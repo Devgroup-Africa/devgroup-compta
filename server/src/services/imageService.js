@@ -58,6 +58,45 @@ export const generateInvoiceJPEG = async (invoice) => {
   }
 };
 
+export const generateInvoicePreviewPDF = async (invoice) => {
+  let browser;
+
+  try {
+    const invoiceData = invoice.toObject ? invoice.toObject() : invoice;
+
+    browser = await puppeteer.launch({
+      headless: 'new',
+      args: ['--no-sandbox', '--disable-setuid-sandbox']
+    });
+
+    const page = await browser.newPage();
+    const logoPath = path.join(__dirname, '../../../public/logo devgroup-1.png');
+    let logoBase64 = '';
+    if (fs.existsSync(logoPath)) {
+      const logoBuffer = fs.readFileSync(logoPath);
+      logoBase64 = `data:image/png;base64,${logoBuffer.toString('base64')}`;
+    }
+
+    await page.setContent(generateInvoiceHTML(invoiceData, logoBase64), {
+      waitUntil: 'networkidle0'
+    });
+    await page.emulateMediaType('screen');
+
+    return await page.pdf({
+      format: 'A4',
+      printBackground: true,
+      margin: { top: '0', right: '0', bottom: '0', left: '0' }
+    });
+  } catch (error) {
+    console.error('Error generating preview PDF:', error);
+    throw new Error(`Erreur lors de la génération du PDF de prévisualisation: ${error.message}`);
+  } finally {
+    if (browser) {
+      await browser.close();
+    }
+  }
+};
+
 function formatCurrency(amount) {
   const num = Math.round(amount ?? 0);
   const formatted = num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
