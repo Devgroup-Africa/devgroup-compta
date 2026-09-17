@@ -57,7 +57,7 @@ app.use(limiter);
 // CORS
 app.use(cors({
   origin: process.env.NODE_ENV === 'production' 
-    ? ['https://your-domain.com'] 
+    ? ['https://compta.devgroup.ga'] 
     : ['http://localhost:3000', 'http://localhost:5173', 'http://localhost:8080'],
   credentials: true
 }));
