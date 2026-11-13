@@ -61,7 +61,7 @@ const allowedOrigins = process.env.NODE_ENV === 'production'
 
 app.use(cors({
   origin: process.env.NODE_ENV === 'production' 
-    ? ['https://compta.devgroup.ga'] 
+    ? ['https://compta.devgroup.ga', 'https://compta.devgroupafrica.com'] 
     : ['http://localhost:3000', 'http://localhost:5173', 'http://localhost:8081'],
   credentials: true
 }));
