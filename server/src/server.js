@@ -55,10 +55,12 @@ const limiter = rateLimit({
 app.use(limiter);
 
 // CORS
+const allowedOrigins = process.env.NODE_ENV === 'production'
+  ? ['https://compta.devgroup.ga', 'https://compta.devgroupafrica.com']
+  : ['http://localhost:3000', 'http://localhost:5173', 'http://localhost:8081'];
+
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production' 
-    ? ['https://compta.devgroup.ga'] 
-    : ['http://localhost:3000', 'http://localhost:5173', 'http://localhost:8081'],
+  origin: allowedOrigins,
   credentials: true
 }));
 
