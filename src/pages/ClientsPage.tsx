@@ -317,7 +317,7 @@ const ClientsPage = () => {
             <CardTitle>Statistiques</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
               <div className="text-center">
                 <div className="text-2xl font-bold text-primary">{clients.length}</div>
                 <div className="text-sm text-gray-600">Total clients</div>

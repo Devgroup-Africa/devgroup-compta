@@ -140,7 +140,7 @@ const JournalPage = () => {
       </PageHeader>
 
       {/* Statistics */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <div className="bg-card rounded-xl border border-border p-4">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
@@ -301,7 +301,8 @@ const JournalPage = () => {
                     </Button>
                   </div>
                 </div>
-                <table className="w-full text-sm">
+                <div className="overflow-x-auto">
+                <table className="w-full min-w-[700px] text-sm">
                   <thead>
                     <tr className="border-b border-border/40">
                       <th className="text-left py-2.5 px-5 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider w-20">Compte</th>
@@ -328,6 +329,7 @@ const JournalPage = () => {
                     </tr>
                   </tbody>
                 </table>
+                </div>
               </div>
             );
           })}

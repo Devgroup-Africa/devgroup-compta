@@ -51,14 +51,14 @@ const InvoiceItemsManager = ({ items, onChange, onFocus, onBlur }: InvoiceItemsM
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <Label className="text-base font-semibold">Articles de la facture</Label>
         <Button
           type="button"
           variant="outline"
           size="sm"
           onClick={handleAddItem}
-          className="gap-2"
+          className="w-full gap-2 sm:w-auto"
         >
           <Plus className="w-4 h-4" />
           Ajouter un article
@@ -83,8 +83,8 @@ const InvoiceItemsManager = ({ items, onChange, onFocus, onBlur }: InvoiceItemsM
           {/* Items */}
           {items.map((item, index) => (
             <div key={index} className="p-4 bg-gray-50 rounded-lg space-y-3">
-              <div className="grid grid-cols-12 gap-3 items-start">
-                <div className="col-span-5">
+              <div className="grid grid-cols-1 items-start gap-3 sm:grid-cols-6 lg:grid-cols-12">
+                <div className="sm:col-span-3 lg:col-span-5">
                   <Label className="text-xs text-gray-600">Description</Label>
                   <Input
                     value={item.description}
@@ -95,7 +95,7 @@ const InvoiceItemsManager = ({ items, onChange, onFocus, onBlur }: InvoiceItemsM
                     className="bg-white mt-1"
                   />
                 </div>
-                <div className="col-span-2">
+                <div className="sm:col-span-1 lg:col-span-2">
                   <Label className="text-xs text-gray-600">Quantité</Label>
                   <Input
                     type="number"
@@ -108,7 +108,7 @@ const InvoiceItemsManager = ({ items, onChange, onFocus, onBlur }: InvoiceItemsM
                     className="bg-white mt-1"
                   />
                 </div>
-                <div className="col-span-2">
+                <div className="sm:col-span-1 lg:col-span-2">
                   <Label className="text-xs text-gray-600">Prix unitaire</Label>
                   <Input
                     type="number"
@@ -121,7 +121,7 @@ const InvoiceItemsManager = ({ items, onChange, onFocus, onBlur }: InvoiceItemsM
                     className="bg-white mt-1"
                   />
                 </div>
-                <div className="col-span-2">
+                <div className="sm:col-span-1 lg:col-span-2">
                   <Label className="text-xs text-gray-600">Total</Label>
                   <div className="flex items-center h-10 mt-1">
                     <span className="font-medium text-gray-900">
@@ -129,7 +129,7 @@ const InvoiceItemsManager = ({ items, onChange, onFocus, onBlur }: InvoiceItemsM
                     </span>
                   </div>
                 </div>
-                <div className="col-span-1 flex items-end justify-center pb-1">
+                <div className="col-span-1 flex items-end justify-end pb-1 sm:col-span-6 lg:col-span-1">
                   <Button
                     type="button"
                     variant="ghost"

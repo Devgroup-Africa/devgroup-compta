@@ -26,7 +26,8 @@ const GeneralLedger = () => {
             </div>
             <span className="text-xs text-muted-foreground bg-muted px-2.5 py-1 rounded-full">{acc.lines.length} mouvements</span>
           </div>
-          <table className="w-full text-sm">
+          <div className="overflow-x-auto">
+          <table className="w-full min-w-[700px] text-sm">
             <thead>
               <tr className="border-b border-border/40">
                 <th className="text-left py-2.5 px-5 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Date</th>
@@ -53,6 +54,7 @@ const GeneralLedger = () => {
               </tr>
             </tbody>
           </table>
+          </div>
         </div>
       ))}
     </div>

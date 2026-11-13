@@ -426,7 +426,8 @@ const InvoicesPage = () => {
         ) : viewMode === "list" ? (
           /* ── TABLE VIEW ── */
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-            <table className="w-full">
+            <div className="overflow-x-auto">
+            <table className="w-full min-w-[900px]">
               <thead>
                 <tr className="border-b border-gray-100 bg-gray-50/70">
                   <ThCol field="number">N° Facture</ThCol>
@@ -541,6 +542,7 @@ const InvoicesPage = () => {
                 })}
               </tbody>
             </table>
+            </div>
           </div>
         ) : (
           /* ── GRID VIEW ── */

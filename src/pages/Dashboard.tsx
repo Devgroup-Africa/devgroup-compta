@@ -237,7 +237,7 @@ const Dashboard = () => {
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-sm">
+            <table className="w-full min-w-[640px] text-sm">
               <thead>
                 <tr className="bg-muted/40">
                   <th className="text-left py-3 px-6 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">N°</th>

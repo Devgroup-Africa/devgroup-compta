@@ -139,8 +139,8 @@ const SupplierDetailPage = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex min-w-0 items-center gap-3 sm:gap-4">
           <Button
             variant="ghost"
             size="sm"
@@ -151,11 +151,11 @@ const SupplierDetailPage = () => {
             Retour
           </Button>
           <div>
-            <h1 className="text-2xl font-bold">{supplier.name}</h1>
+            <h1 className="break-words text-xl font-bold sm:text-2xl">{supplier.name}</h1>
             <p className="text-sm text-gray-600">Détails du fournisseur</p>
           </div>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <Button
             variant="outline"
             onClick={() => setShowEditForm(true)}
@@ -177,7 +177,7 @@ const SupplierDetailPage = () => {
       {/* Main Info Card */}
       <Card>
         <CardHeader>
-          <div className="flex items-center justify-between">
+          <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 rounded-full bg-warning/10 flex items-center justify-center">
                 <Building2 className="w-6 h-6 text-warning" />

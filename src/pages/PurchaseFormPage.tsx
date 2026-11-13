@@ -309,9 +309,9 @@ export default function PurchaseFormPage() {
 
         <Card>
           <CardHeader>
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
               <CardTitle>Articles</CardTitle>
-              <Button type="button" variant="outline" size="sm" onClick={addItem}>
+              <Button type="button" variant="outline" size="sm" onClick={addItem} className="w-full sm:w-auto">
                 <Plus className="w-4 h-4 mr-2" />
                 Ajouter un article
               </Button>

@@ -118,8 +118,8 @@ const ClientDetailPage = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex min-w-0 items-center gap-3 sm:gap-4">
           <Button
             variant="ghost"
             size="sm"
@@ -130,11 +130,11 @@ const ClientDetailPage = () => {
             Retour
           </Button>
           <div>
-            <h1 className="text-2xl font-bold">{client.name}</h1>
+            <h1 className="break-words text-xl font-bold sm:text-2xl">{client.name}</h1>
             <p className="text-sm text-gray-600">Détails du client</p>
           </div>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <Button
             variant="outline"
             onClick={() => setShowEditForm(true)}
@@ -156,7 +156,7 @@ const ClientDetailPage = () => {
       {/* Main Info Card */}
       <Card>
         <CardHeader>
-          <div className="flex items-center justify-between">
+          <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
                 {client.company ? (
@@ -253,7 +253,7 @@ const ClientDetailPage = () => {
       </Card>
 
       {/* Financial Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <Card>
           <CardContent className="pt-6">
             <div className="text-center">
