@@ -5,6 +5,7 @@
   "main": "src/server.js",
   "type": "module",
   "scripts": {
+    "build": "node --input-type=module -e \"import { cpSync, mkdirSync } from 'node:fs'; mkdirSync('dist', { recursive: true }); cpSync('src', 'dist', { recursive: true });\"",
     "dev": "nodemon src/server.js",
     "start": "node src/server.js",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
