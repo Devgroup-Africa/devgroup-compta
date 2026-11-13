@@ -42,7 +42,7 @@ const BalancePage = () => {
       <PageHeader title="Balance & États financiers" description="Balance générale, compte de résultat et bilan" />
 
       <Tabs defaultValue="balance" className="space-y-4">
-        <TabsList className="bg-muted/50">
+        <TabsList className="h-auto max-w-full justify-start overflow-x-auto bg-muted/50">
           <TabsTrigger value="balance">Balance générale</TabsTrigger>
           <TabsTrigger value="income">Compte de résultat</TabsTrigger>
           <TabsTrigger value="bilan">Bilan</TabsTrigger>

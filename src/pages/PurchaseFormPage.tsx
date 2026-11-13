@@ -232,7 +232,7 @@ export default function PurchaseFormPage() {
             <CardTitle>Informations générales</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div className="space-y-2">
                 <Label htmlFor="supplier">Fournisseur</Label>
                 <select
@@ -269,7 +269,7 @@ export default function PurchaseFormPage() {
               </div>
             </div>
 
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
               <div className="space-y-2">
                 <Label htmlFor="date">Date *</Label>
                 <Input
@@ -319,9 +319,9 @@ export default function PurchaseFormPage() {
           </CardHeader>
           <CardContent className="space-y-4">
             {form.items.map((item, index) => (
-              <div key={index} className="flex gap-4 items-start p-4 bg-muted/30 border border-border rounded-lg hover:bg-muted/50 transition-colors">
-                <div className="flex-1 grid grid-cols-4 gap-4">
-                  <div className="col-span-2 space-y-2">
+              <div key={index} className="flex flex-col gap-4 items-stretch p-3 sm:flex-row sm:items-start sm:p-4 bg-muted/30 border border-border rounded-lg hover:bg-muted/50 transition-colors">
+                <div className="grid flex-1 grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4">
+                  <div className="space-y-2 sm:col-span-2">
                     <Label className="text-xs text-muted-foreground">Description *</Label>
                     <Input
                       value={item.description}
@@ -353,7 +353,7 @@ export default function PurchaseFormPage() {
                     />
                   </div>
                 </div>
-                <div className="space-y-2 min-w-[120px]">
+                <div className="space-y-2 sm:min-w-[120px]">
                   <Label className="text-xs text-muted-foreground">Total</Label>
                   <div className="font-semibold text-lg pt-1.5">{item.total.toLocaleString()} FCFA</div>
                 </div>
@@ -363,7 +363,7 @@ export default function PurchaseFormPage() {
                     variant="ghost"
                     size="icon"
                     onClick={() => removeItem(index)}
-                    className="mt-7 hover:bg-destructive/10 hover:text-destructive"
+                    className="self-end hover:bg-destructive/10 hover:text-destructive sm:mt-7"
                   >
                     <Trash2 className="w-4 h-4" />
                   </Button>
@@ -483,11 +483,11 @@ export default function PurchaseFormPage() {
           </CardContent>
         </Card>
 
-        <div className="flex justify-end gap-4 sticky bottom-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 p-4 border-t -mx-6 -mb-6">
-          <Button type="button" variant="outline" onClick={() => navigate('/achats')}>
+        <div className="sticky bottom-0 -mx-3 -mb-3 flex flex-col-reverse justify-end gap-2 border-t bg-background/95 p-3 backdrop-blur supports-[backdrop-filter]:bg-background/60 sm:-mx-5 sm:-mb-5 sm:flex-row sm:gap-4 sm:p-4 lg:-mx-8 lg:-mb-8">
+          <Button type="button" variant="outline" onClick={() => navigate('/achats')} className="w-full sm:w-auto">
             Annuler
           </Button>
-          <Button type="submit" disabled={saving} className="min-w-[120px]">
+          <Button type="submit" disabled={saving} className="w-full sm:min-w-[120px] sm:w-auto">
             {saving ? 'Enregistrement...' : 'Enregistrer'}
           </Button>
         </div>

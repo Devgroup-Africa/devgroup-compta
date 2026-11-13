@@ -216,7 +216,7 @@ const TransactionDetailPage = () => {
               <CardTitle>Détails de la transaction</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div>
                   <p className="text-sm font-medium text-muted-foreground">Description</p>
                   <p className="text-base">{transaction.description}</p>
@@ -229,7 +229,7 @@ const TransactionDetailPage = () => {
 
               <Separator />
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div className="flex items-center gap-2">
                   <Calendar className="h-4 w-4 text-muted-foreground" />
                   <div>

@@ -3,10 +3,10 @@ import AppSidebar from "./AppSidebar";
 
 const AppLayout = () => {
   return (
-    <div className="flex min-h-screen bg-slate-50">
+    <div className="flex min-h-screen flex-col bg-slate-50 md:flex-row">
       <AppSidebar />
-      <main className="flex-1 overflow-auto">
-        <div className="p-6 lg:p-8">
+      <main className="min-w-0 flex-1 overflow-x-hidden">
+        <div className="p-3 sm:p-5 lg:p-8">
           <Outlet />
         </div>
       </main>

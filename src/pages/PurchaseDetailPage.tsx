@@ -201,7 +201,7 @@ export default function PurchaseDetailPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-4">
           <Button variant="ghost" size="sm" onClick={() => navigate('/achats')} className="gap-2">
             <ArrowLeft className="w-4 h-4" />
@@ -212,7 +212,7 @@ export default function PurchaseDetailPage() {
             <p className="text-sm text-gray-600">Facture fournisseur</p>
           </div>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap gap-2">
           {purchase.attachment && purchase.attachmentName && (
             <Button variant="outline" onClick={downloadAttachment}>
               <Download className="w-4 h-4 mr-2" />
@@ -240,7 +240,7 @@ export default function PurchaseDetailPage() {
       <Card>
         <CardContent className="p-0">
           <div
-            className="bg-white p-8 max-w-4xl mx-auto font-sans text-gray-800"
+            className="mx-auto w-full max-w-4xl bg-white p-4 font-sans text-gray-800 sm:p-8"
             style={{ fontFamily: "'Segoe UI', Arial, sans-serif" }}
           >
             {/* TOP HEADER */}
@@ -263,8 +263,7 @@ export default function PurchaseDetailPage() {
             <div className="flex items-center justify-center mb-8 mt-6">
               <div className="w-1.5 h-10 bg-red-700 mr-3 rounded-sm" />
               <h2
-                className="text-4xl font-extrabold text-red-900 tracking-widest"
-                style={{ letterSpacing: '0.18em' }}
+                className="text-xl font-extrabold tracking-wide text-red-900 sm:text-4xl sm:tracking-[0.18em]"
               >
                 FACTURE FOURNISSEUR
               </h2>
@@ -273,7 +272,7 @@ export default function PurchaseDetailPage() {
             <div className="h-px bg-red-600 mb-7" />
 
             {/* COMPANY + SUPPLIER */}
-            <div className="grid grid-cols-2 gap-6 mb-7">
+            <div className="mb-7 grid grid-cols-1 gap-6 sm:grid-cols-2">
               {/* Company (Acheteur) */}
               <div className="bg-red-50 p-4 rounded-sm">
                 <p className="text-xs font-bold text-red-900 uppercase tracking-wide mb-2">ACHETEUR</p>
@@ -299,7 +298,7 @@ export default function PurchaseDetailPage() {
             </div>
 
             {/* META INFO */}
-            <div className="grid grid-cols-2 gap-4 mb-7">
+            <div className="mb-7 grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div className="space-y-1.5">
                 <div className="flex items-center bg-gray-100 px-3 py-2 rounded-sm gap-2">
                   <span className="text-xs font-semibold text-gray-700 w-28 shrink-0">N° Facture :</span>
@@ -327,8 +326,8 @@ export default function PurchaseDetailPage() {
             </div>
 
             {/* ITEMS TABLE */}
-            <div className="mb-6">
-              <table className="w-full border-collapse" style={{ borderColor: '#d1d5db' }}>
+            <div className="mb-6 overflow-x-auto">
+              <table className="w-full min-w-[600px] border-collapse" style={{ borderColor: '#d1d5db' }}>
                 <thead>
                   <tr style={{ backgroundColor: '#7f1d1d' }} className="text-white">
                     <th className="text-center p-2.5 border border-gray-300 text-xs font-semibold w-8">#</th>
@@ -358,7 +357,7 @@ export default function PurchaseDetailPage() {
 
             {/* TOTALS */}
             <div className="flex justify-end mb-8">
-              <div className="w-80">
+              <div className="w-full sm:w-80">
                 <div className="flex justify-between py-2 px-4 border border-gray-200">
                   <span className="text-xs text-gray-700">Sous-total HT</span>
                   <span className="text-xs font-semibold text-gray-800">{formatXAF(purchase.subtotal)}</span>
@@ -393,7 +392,7 @@ export default function PurchaseDetailPage() {
                 <h3 className="font-bold text-sm mb-3 text-red-900 uppercase tracking-wide">
                   INFORMATIONS DE PAIEMENT
                 </h3>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <div className="bg-green-50 p-3 rounded-sm">
                     <p className="font-semibold text-xs mb-1 text-green-900">Date de paiement</p>
                     <p className="text-xs text-green-800">{new Date(purchase.paymentDate).toLocaleDateString('fr-FR')}</p>
@@ -427,7 +426,7 @@ export default function PurchaseDetailPage() {
             )}
 
             {/* SIGNATURES */}
-            <div className="grid grid-cols-2 gap-12 mt-14">
+            <div className="mt-14 grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-12">
               <div>
                 <p className="font-semibold text-xs mb-1 text-gray-800">
                   Signature / Cachet Fournisseur
@@ -452,7 +451,7 @@ export default function PurchaseDetailPage() {
                 Document comptable — À conserver
               </p>
               <div
-                className="flex items-center justify-center gap-4 py-2 px-4 rounded-sm"
+                className="flex flex-wrap items-center justify-center gap-3 py-2 px-4 rounded-sm"
                 style={{ backgroundColor: '#7f1d1d' }}
               >
                 {companyInfo.email && (

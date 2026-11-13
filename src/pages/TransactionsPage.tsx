@@ -168,8 +168,8 @@ const TransactionsPage = () => {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen">
-        <div className="flex-1 space-y-6">
+      <div className="min-w-0">
+        <div className="min-w-0 space-y-6">
           <PageHeader title="Transactions" description="Gestion des transactions de trésorerie" />
           <div className="flex items-center justify-center h-64">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
@@ -181,8 +181,8 @@ const TransactionsPage = () => {
 
   if (showTransactionForm) {
     return (
-      <div className="flex min-h-screen">
-        <div className="flex-1 p-6">
+      <div className="min-w-0">
+        <div className="min-w-0 p-3 sm:p-6">
           <TransactionForm
             transaction={editingTransaction}
             onSuccess={handleTransactionSuccess}
@@ -194,10 +194,10 @@ const TransactionsPage = () => {
   }
 
   return (
-    <div className="flex min-h-screen">
-      <div className="flex-1 space-y-6">
+    <div className="min-w-0">
+      <div className="min-w-0 space-y-6">
         <PageHeader title="Transactions" description="Gestion des transactions de trésorerie">
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <Button
               variant="outline"
               onClick={handleExportTransactions}
@@ -252,18 +252,18 @@ const TransactionsPage = () => {
         {/* Filtres */}
         <Card>
           <CardHeader>
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <CardTitle>Toutes les transactions</CardTitle>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-col gap-2 sm:flex-row">
                 <Input
                   type="text"
                   placeholder="Rechercher..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-64"
+                  className="w-full sm:w-64"
                 />
                 <Select value={typeFilter} onValueChange={setTypeFilter}>
-                  <SelectTrigger className="w-[180px]">
+                  <SelectTrigger className="w-full sm:w-[180px]">
                     <SelectValue placeholder="Type" />
                   </SelectTrigger>
                   <SelectContent>
@@ -366,7 +366,7 @@ const TransactionsPage = () => {
 
             {/* Pagination */}
             {totalPages > 1 && (
-              <div className="flex items-center justify-between mt-4 pt-4 border-t border-slate-200">
+              <div className="mt-4 flex flex-col gap-3 border-t border-slate-200 pt-4 sm:flex-row sm:items-center sm:justify-between">
                 <p className="text-sm text-slate-600">
                   Page {currentPage} sur {totalPages} ({filteredTransactions.length} transactions)
                 </p>

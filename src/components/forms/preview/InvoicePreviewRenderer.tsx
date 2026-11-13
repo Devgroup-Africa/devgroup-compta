@@ -181,7 +181,7 @@ const InvoicePreviewRenderer: React.FC<InvoicePreviewRendererProps> = ({ data })
         </div>
       ) : null}
 
-      <div className="grid grid-cols-2 gap-3 text-sm">
+      <div className="grid grid-cols-1 gap-3 text-sm sm:grid-cols-2">
         <div className="space-y-1">
           <span className="text-gray-600 dark:text-gray-400 text-xs uppercase">Date d'émission</span>
           <p className="text-gray-900 dark:text-gray-100">
@@ -197,7 +197,6 @@ const InvoicePreviewRenderer: React.FC<InvoicePreviewRendererProps> = ({ data })
       </div>
     </div>
   );
-};
 };
 
 export default InvoicePreviewRenderer;

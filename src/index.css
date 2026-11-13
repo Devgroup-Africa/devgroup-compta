@@ -68,6 +68,12 @@
   body {
     @apply bg-background text-foreground font-sans antialiased;
     font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    min-width: 320px;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  #root {
+    min-height: 100vh;
   }
   h1, h2, h3, h4, h5, h6 {
     font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;

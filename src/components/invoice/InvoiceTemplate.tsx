@@ -79,7 +79,7 @@ const InvoiceTemplate = ({ invoice, forPrint = false }: InvoiceTemplateProps) =>
 
   return (
     <div
-      className={`bg-white ${forPrint ? 'p-8' : 'p-8'} max-w-4xl mx-auto font-sans text-gray-800`}
+      className={`mx-auto w-full max-w-4xl bg-white font-sans text-gray-800 ${forPrint ? 'p-8' : 'p-4 sm:p-8'}`}
       style={{ fontFamily: "'Segoe UI', Arial, sans-serif" }}
     >
       {/* ── TOP HEADER: company name + thin blue rule ── */}
@@ -108,8 +108,7 @@ const InvoiceTemplate = ({ invoice, forPrint = false }: InvoiceTemplateProps) =>
         {/* left accent bar */}
         <div className="w-1.5 h-10 bg-blue-700 mr-3 rounded-sm" />
         <h2
-          className="text-4xl font-extrabold text-blue-900 tracking-widest"
-          style={{ letterSpacing: '0.18em' }}
+          className="text-2xl font-extrabold tracking-[0.1em] text-blue-900 sm:text-4xl sm:tracking-[0.18em]"
         >
           FACTURE
         </h2>
@@ -119,7 +118,7 @@ const InvoiceTemplate = ({ invoice, forPrint = false }: InvoiceTemplateProps) =>
       <div className="h-px bg-blue-600 mb-7" />
 
       {/* ── ÉMETTEUR + CLIENT ── */}
-      <div className="grid grid-cols-2 gap-6 mb-7">
+      <div className="mb-7 grid grid-cols-1 gap-6 sm:grid-cols-2">
         {/* Émetteur */}
         <div className="bg-blue-50 p-4 rounded-sm">
           <p className="text-xs font-bold text-blue-900 uppercase tracking-wide mb-2">ÉMETTEUR</p>
@@ -146,7 +145,7 @@ const InvoiceTemplate = ({ invoice, forPrint = false }: InvoiceTemplateProps) =>
       </div>
 
       {/* ── META INFOS: N° Facture / Objet / Dates ── */}
-      <div className="grid grid-cols-2 gap-4 mb-7">
+      <div className="mb-7 grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="space-y-1.5">
           <div className="flex items-center bg-gray-100 px-3 py-2 rounded-sm gap-2">
             <span className="text-xs font-semibold text-gray-700 w-28 shrink-0">N° Facture :</span>
@@ -172,8 +171,8 @@ const InvoiceTemplate = ({ invoice, forPrint = false }: InvoiceTemplateProps) =>
       </div>
 
       {/* ── ITEMS TABLE ── */}
-      <div className="mb-6">
-        <table className="w-full border-collapse" style={{ borderColor: '#d1d5db' }}>
+      <div className="mb-6 overflow-x-auto">
+        <table className="w-full min-w-[640px] border-collapse" style={{ borderColor: '#d1d5db' }}>
           <thead>
             <tr style={{ backgroundColor: '#1e3a5f' }} className="text-white">
               <th className="text-center p-2.5 border border-gray-300 text-xs font-semibold w-8">#</th>
@@ -216,7 +215,7 @@ const InvoiceTemplate = ({ invoice, forPrint = false }: InvoiceTemplateProps) =>
 
       {/* ── TOTALS ── */}
       <div className="flex justify-end mb-8">
-        <div className="w-80">
+        <div className="w-full sm:w-80">
           <div className="flex justify-between py-2 px-4 border border-gray-200">
             <span className="text-xs text-gray-700">Sous-total HT</span>
             <span className="text-xs font-semibold text-gray-800">{formatXAF(invoice.subtotal)}</span>
@@ -244,7 +243,7 @@ const InvoiceTemplate = ({ invoice, forPrint = false }: InvoiceTemplateProps) =>
           <h3 className="font-bold text-sm mb-4 text-blue-900 uppercase tracking-wide">
             INFORMATIONS DE PAIEMENT
           </h3>
-          <div className="grid grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-8">
             {invoice.paymentInfo?.mobileMoney?.map((mm, index) => (
               <div key={index}>
                 <p className="font-semibold text-xs mb-1 text-gray-800">{mm.provider} :</p>
@@ -264,7 +263,7 @@ const InvoiceTemplate = ({ invoice, forPrint = false }: InvoiceTemplateProps) =>
       )}
 
       {/* ── SIGNATURES ── */}
-      <div className="grid grid-cols-2 gap-12 mt-14">
+      <div className="mt-14 grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-12">
         <div>
           <p className="font-semibold text-xs mb-1 text-gray-800">
             Signature / Cachet {invoice.companyInfo?.name || 'DevGroup Africa'}
@@ -288,7 +287,7 @@ const InvoiceTemplate = ({ invoice, forPrint = false }: InvoiceTemplateProps) =>
         </p>
         {/* footer info bar */}
         <div
-          className="flex items-center justify-center gap-4 py-2 px-4 rounded-sm"
+          className="flex flex-wrap items-center justify-center gap-3 py-2 px-4 rounded-sm"
           style={{ backgroundColor: '#1e3a5f' }}
         >
           {/* Globe icon */}

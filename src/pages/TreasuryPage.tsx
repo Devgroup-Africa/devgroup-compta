@@ -235,8 +235,8 @@ const TresoreriePage = () => {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen">
-        <div className="flex-1 space-y-6">
+      <div className="min-w-0">
+        <div className="min-w-0 space-y-6">
           <PageHeader title="Trésorerie" description="Gestion de trésorerie et flux de trésorerie" />
           <div className="flex items-center justify-center h-64">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
@@ -249,8 +249,8 @@ const TresoreriePage = () => {
   // Afficher le formulaire de compte bancaire si actif
   if (showBankAccountForm) {
     return (
-      <div className="flex min-h-screen">
-        <div className="flex-1 p-6">
+      <div className="min-w-0">
+        <div className="min-w-0 p-3 sm:p-6">
           <BankAccountForm
             bankAccount={editingBankAccount}
             onSuccess={handleBankAccountSuccess}
@@ -264,8 +264,8 @@ const TresoreriePage = () => {
   // Afficher le formulaire de transaction si actif
   if (showTransactionForm) {
     return (
-      <div className="flex min-h-screen">
-        <div className="flex-1 p-6">
+      <div className="min-w-0">
+        <div className="min-w-0 p-3 sm:p-6">
           <TransactionForm
             transaction={editingTransaction}
             onSuccess={handleTransactionSuccess}
@@ -279,8 +279,8 @@ const TresoreriePage = () => {
   // Afficher le formulaire de virement si actif
   if (showTransferForm) {
     return (
-      <div className="flex min-h-screen">
-        <div className="flex-1 p-6">
+      <div className="min-w-0">
+        <div className="min-w-0 p-3 sm:p-6">
           <TransferForm
             onSuccess={handleTransferSuccess}
             onCancel={() => setShowTransferForm(false)}
@@ -291,10 +291,10 @@ const TresoreriePage = () => {
   }
 
   return (
-    <div className="flex min-h-screen">
-      <div className="flex-1 space-y-6">
+    <div className="min-w-0">
+      <div className="min-w-0 space-y-6">
         <PageHeader title="Trésorerie" description="Gestion de trésorerie et flux de trésorerie">
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             <Button variant="outline" onClick={handleNewTransfer}>
               <ArrowUpRight className="w-4 h-4 mr-2" />
               Virement
@@ -373,10 +373,10 @@ const TresoreriePage = () => {
 
         {/* Tabs */}
         <Tabs defaultValue="accounts" className="space-y-4">
-          <TabsList className="bg-white border border-slate-200">
-            <TabsTrigger value="accounts">Comptes bancaires</TabsTrigger>
-            <TabsTrigger value="transactions">Flux de trésorerie</TabsTrigger>
-            <TabsTrigger value="forecast">Prévisions</TabsTrigger>
+          <TabsList className="h-auto w-full justify-start overflow-x-auto border border-slate-200 bg-white sm:w-fit">
+            <TabsTrigger className="shrink-0" value="accounts">Comptes bancaires</TabsTrigger>
+            <TabsTrigger className="shrink-0" value="transactions">Flux de trésorerie</TabsTrigger>
+            <TabsTrigger className="shrink-0" value="forecast">Prévisions</TabsTrigger>
           </TabsList>
 
           {/* Comptes bancaires */}
@@ -457,11 +457,11 @@ const TresoreriePage = () => {
           <TabsContent value="transactions" className="space-y-4">
             <Card>
               <CardHeader>
-                <div className="flex items-center justify-between">
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                   <CardTitle>Mouvements récents</CardTitle>
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-col gap-2 sm:flex-row">
                     <Select value={sortBy} onValueChange={(value) => handleSortChange(value as "date" | "amount")}>
-                      <SelectTrigger className="w-[180px]">
+                      <SelectTrigger className="w-full sm:w-[180px]">
                         <SelectValue placeholder="Trier par" />
                       </SelectTrigger>
                       <SelectContent>
@@ -559,7 +559,7 @@ const TresoreriePage = () => {
                 
                 {/* Pagination */}
                 {totalPages > 1 && (
-                  <div className="flex items-center justify-between mt-4 pt-4 border-t border-slate-200">
+                  <div className="mt-4 flex flex-col gap-3 border-t border-slate-200 pt-4 sm:flex-row sm:items-center sm:justify-between">
                     <p className="text-sm text-slate-600">
                       Page {currentPage} sur {totalPages} ({sortedTransactions.length} transactions)
                     </p>

@@ -303,8 +303,7 @@ const InvoicesPage = () => {
   );
 
   return (
-    <div className="flex min-h-screen bg-gray-50/50">
-      <div className="flex-1 space-y-5 p-1">
+    <div className="min-w-0 space-y-5 bg-gray-50/50">
         <PageHeader
           title="Factures"
           description="Gestion des factures clients avec suivi TVA et paiements"
@@ -319,7 +318,7 @@ const InvoicesPage = () => {
         </PageHeader>
 
         {/* Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <StatCard icon={FileText} value={String(stats.total)} label="Total factures" iconBg="bg-blue-50" iconColor="text-blue-600" />
           <StatCard icon={Clock} value={String(stats.draft + stats.sent)} label="En attente" iconBg="bg-amber-50" iconColor="text-amber-600" />
           <StatCard icon={TrendingUp} value={formatXAF(stats.paidAmount)} label="Encaissé" iconBg="bg-emerald-50" iconColor="text-emerald-600" />
@@ -387,7 +386,6 @@ const InvoicesPage = () => {
               >
                 <LayoutGrid className="w-4 h-4" />
               </button>
-            </div>
           </div>
         </div>
 

@@ -158,8 +158,8 @@ const ClientsPage = () => {
   }
 
   return (
-    <div className="flex min-h-screen">
-      <div className="flex-1 space-y-6">
+    <div className="min-w-0">
+      <div className="min-w-0 space-y-6">
         <PageHeader title="Clients" description="Gestion de vos clients et prospects">
           <Button onClick={handleCreateClient}>
             <Plus className="w-4 h-4 mr-2" />

@@ -147,8 +147,7 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="flex min-h-screen">
-      <div className="flex-1 space-y-6">
+    <div className="min-w-0 space-y-6">
       <PageHeader title="Dashboard" description="Vue d'ensemble financière — DevGroup Africa" />
 
       {/* KPIs */}
@@ -267,7 +266,6 @@ const Dashboard = () => {
           </div>
         )}
       </div>
-    </div>
     
     {/* Temporairement désactivé */}
     {/* <ContextualSidebar 
@@ -281,7 +279,7 @@ const Dashboard = () => {
         fournisseurs: stats.supplierCount
       }}
     /> */}
-  </div>
+      </div>
   );
 };
 

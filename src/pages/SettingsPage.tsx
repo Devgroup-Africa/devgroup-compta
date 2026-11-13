@@ -237,9 +237,9 @@ export default function SettingsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Paramètres de l&apos;entreprise</h1>
+          <h1 className="text-2xl font-bold sm:text-3xl">Paramètres de l&apos;entreprise</h1>
           <p className="text-muted-foreground mt-1">
             Configurez les informations de votre entreprise
           </p>
@@ -259,7 +259,7 @@ export default function SettingsPage() {
       )}
 
       <Tabs defaultValue="about" className="space-y-6">
-        <TabsList>
+        <TabsList className="h-auto max-w-full justify-start overflow-x-auto">
           <TabsTrigger value="about" className="flex items-center gap-2">
             <Building2 className="w-4 h-4" />
             À propos
@@ -300,7 +300,7 @@ export default function SettingsPage() {
                 </div>
               )}
               
-              <div className="grid grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                 <div>
                   <Label className="text-muted-foreground">Nom de l&apos;entreprise</Label>
                   <p className="text-lg font-semibold mt-1">{settings.name || '-'}</p>
@@ -368,7 +368,7 @@ export default function SettingsPage() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="name">
                     Nom de l&apos;entreprise <span className="text-destructive">*</span>
@@ -401,7 +401,7 @@ export default function SettingsPage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="phone">Téléphone</Label>
                   <Input
@@ -438,7 +438,7 @@ export default function SettingsPage() {
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="taxId">Numéro d&apos;identification fiscale (IFU)</Label>
                   <Input
@@ -538,7 +538,7 @@ export default function SettingsPage() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
                 <div className="space-y-2">
                   <Label htmlFor="currency">Devise</Label>
                   <Input
@@ -582,7 +582,7 @@ export default function SettingsPage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="invoicePrefix">Préfixe des factures</Label>
                   <Input
@@ -624,8 +624,8 @@ export default function SettingsPage() {
             </CardHeader>
             <CardContent className="space-y-4">
               {(settings.mobileMoneyAccounts || []).map((account, index) => (
-                <div key={index} className="flex gap-4 items-start p-4 border rounded-lg">
-                  <div className="flex-1 grid grid-cols-3 gap-4">
+                <div key={index} className="flex flex-col gap-4 p-4 border rounded-lg sm:flex-row sm:items-start">
+                  <div className="grid flex-1 grid-cols-1 gap-4 sm:grid-cols-3">
                     <div className="space-y-2">
                       <Label>Opérateur</Label>
                       <Input
@@ -681,8 +681,8 @@ export default function SettingsPage() {
             </CardHeader>
             <CardContent className="space-y-4">
               {(settings.bankAccounts || []).map((account, index) => (
-                <div key={index} className="flex gap-4 items-start p-4 border rounded-lg">
-                  <div className="flex-1 grid grid-cols-3 gap-4">
+                <div key={index} className="flex flex-col gap-4 p-4 border rounded-lg sm:flex-row sm:items-start">
+                  <div className="grid flex-1 grid-cols-1 gap-4 sm:grid-cols-3">
                     <div className="space-y-2">
                       <Label>Banque</Label>
                       <Input

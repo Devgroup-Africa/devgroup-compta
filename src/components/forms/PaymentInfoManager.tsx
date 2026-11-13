@@ -122,7 +122,7 @@ const PaymentInfoManager: React.FC<PaymentInfoManagerProps> = ({
     <div className="space-y-6">
       {/* Mobile Money Section */}
       <div>
-        <div className="flex items-center justify-between mb-4">
+        <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <Label className="text-base font-semibold">Mobile Money</Label>
           <Button
             type="button"
@@ -169,7 +169,7 @@ const PaymentInfoManager: React.FC<PaymentInfoManagerProps> = ({
                   </Button>
                 </div>
 
-                <div className="grid grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
                   <div>
                     <Label className="text-xs text-gray-600">Fournisseur</Label>
                     <Select
@@ -223,7 +223,7 @@ const PaymentInfoManager: React.FC<PaymentInfoManagerProps> = ({
 
       {/* Bank Accounts Section */}
       <div>
-        <div className="flex items-center justify-between mb-4">
+        <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <Label className="text-base font-semibold">Comptes bancaires</Label>
           <Button
             type="button"
@@ -270,7 +270,7 @@ const PaymentInfoManager: React.FC<PaymentInfoManagerProps> = ({
                   </Button>
                 </div>
 
-                <div className="grid grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
                   <div>
                     <Label className="text-xs text-gray-600">Nom de la banque</Label>
                     <Input

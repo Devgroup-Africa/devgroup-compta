@@ -142,8 +142,8 @@ const BankAccountDetailPage = () => {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen">
-        <div className="flex-1 space-y-6">
+      <div className="min-w-0">
+        <div className="min-w-0 space-y-6">
           <PageHeader title="Détails du compte" description="Chargement..." />
           <div className="flex items-center justify-center h-64">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
@@ -155,8 +155,8 @@ const BankAccountDetailPage = () => {
 
   if (!bankAccount) {
     return (
-      <div className="flex min-h-screen">
-        <div className="flex-1 space-y-6">
+      <div className="min-w-0">
+        <div className="min-w-0 space-y-6">
           <PageHeader title="Compte non trouvé" description="Ce compte bancaire n'existe pas" />
           <div className="flex items-center justify-center h-64">
             <Button onClick={() => navigate("/treasury")}>
@@ -170,13 +170,13 @@ const BankAccountDetailPage = () => {
   }
 
   return (
-    <div className="flex min-h-screen">
-      <div className="flex-1 space-y-6">
+    <div className="min-w-0">
+      <div className="min-w-0 space-y-6">
         <PageHeader 
           title={bankAccount.name} 
           description={`${bankAccount.bank} - ${bankAccount.accountNumber}`}
         >
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <Button
               variant="outline"
               onClick={handleRecalculateBalance}
